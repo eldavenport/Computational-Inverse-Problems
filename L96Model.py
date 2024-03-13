@@ -3,6 +3,7 @@ import numpy as np
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
 # building numerical model for Lorenz 96
+from numba import njit
 
 def l96model(T=1000, dt=0.01, nx=1, x0=1, gamma=8):
     # dXi/dt = -Xi + (Xi+1 - Xi-2)Xi-1 + gamma
@@ -20,22 +21,6 @@ def l96model(T=1000, dt=0.01, nx=1, x0=1, gamma=8):
         
         return dx_dt
 
-    t = np.arange(0,T,dt)
+    t = np.arange(0,T+dt,dt)
     soln = solve_ivp(L96, (0, T), x0, t_eval=t)
-
     return soln.y
-
-# TEST
-# nx = 40
-# x0 = np.random.uniform(0,1,nx)
-
-# y = l96model(nx=nx,x0=x0)
-# # print(soln.y.shape)
-# # Plot the first three variables
-# fig = plt.figure()
-# ax = fig.add_subplot(projection="3d")
-# ax.plot(y[0,-1000:], y[1,-1000:], y[2, -1000:])
-# ax.set_xlabel("$x_1$")
-# ax.set_ylabel("$x_2$")
-# ax.set_zlabel("$x_3$")
-# plt.show()
